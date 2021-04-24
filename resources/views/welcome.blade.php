@@ -421,7 +421,7 @@
         </div>
         <br>
 
-        <example-component></example-component>
+        <articulo />
     </div>
     <script src="{{asset('js/app.js')}}"></script>
 </body>

@@ -10,13 +10,20 @@ class ArticuloController extends Controller
   
     public function index()
     {
-        //
+        return Articulo::orderBy('id','Desc')->get();
     }
 
-  
-    public function store(Request $request)
+  //se adicionno Articulo $articulo
+    public function store(Request $request, Articulo $articulo)
     {
-        //
+
+        $request->validate([
+            'nombre'=>'required|min:4|max:150',
+            'descripcion'=>'required|min:4',
+            'stock'=>'required',
+        ]);
+        $articulo= new Articulo;
+        $articulo->create($request->all());
     }
 
    
@@ -28,7 +35,7 @@ class ArticuloController extends Controller
   
     public function update(Request $request, Articulo $articulo)
     {
-        //
+        $articulo->update($request->all());
     }
 
     /**
@@ -39,6 +46,6 @@ class ArticuloController extends Controller
      */
     public function destroy(Articulo $articulo)
     {
-        //
+        $articulo->delete();
     }
 }

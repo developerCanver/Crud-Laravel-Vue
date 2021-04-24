@@ -4,7 +4,7 @@ require('alpinejs');
 
 import Vue from 'vue';
 
-Vue.component('example-component', require('./components/Example.vue').default);
+Vue.component('articulo', require('./components/Articulo.vue').default);
 
 const app = new Vue({
     el: '#app',

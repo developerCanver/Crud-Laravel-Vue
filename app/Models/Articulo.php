@@ -12,5 +12,5 @@ class Articulo extends Model
         'nombre',
         'descripcion',
         'stock',
-    ]
+    ];
 }
