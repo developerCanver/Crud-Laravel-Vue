@@ -4,24 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Articulo;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\ArticuloRequest;
 class ArticuloController extends Controller
 {
   
-    public function index()
+    public function index(Request $request)
     {
-        return Articulo::orderBy('id','Desc')->get();
+        $per_page=$request->per_page;
+        return Articulo::orderBy('id','Desc')->paginate($per_page);
     }
 
   //se adicionno Articulo $articulo
-    public function store(Request $request, Articulo $articulo)
+    public function store(ArticuloRequest $request, Articulo $articulo)
     {
 
-        $request->validate([
-            'nombre'=>'required|min:4|max:150',
-            'descripcion'=>'required|min:4',
-            'stock'=>'required',
-        ]);
+     
         $articulo= new Articulo;
         $articulo->create($request->all());
     }
@@ -33,7 +30,7 @@ class ArticuloController extends Controller
     }
 
   
-    public function update(Request $request, Articulo $articulo)
+    public function update(ArticuloRequest $request, Articulo $articulo)
     {
         $articulo->update($request->all());
     }
