@@ -151,6 +151,7 @@
                     params: this.paginate
                 });
                 this.articulos = res.data;
+               // console.log(articulos)
                 this.listarPaginas();
             }, 
               async listarPaginas() {

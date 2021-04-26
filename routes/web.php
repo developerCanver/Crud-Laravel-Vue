@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ArticuloController;
+use App\Http\Controllers\DataArticuloController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,10 +18,14 @@ use App\Http\Controllers\ArticuloController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/articulosDataTable', function () {
+    return view('articulosDataTable');
+});
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
 Route::apiResource('articulos', ArticuloController::class);
+Route::apiResource('dataArticulos', DataArticuloController::class);
 //para la api solo se adiciona apiResource
