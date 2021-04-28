@@ -96,27 +96,32 @@
                 {{articulos.from}} - {{articulos.to}} Total:{{articulos.total}}
             </div>
             <div class="col-1 md-1">
-                    <select class="form-control" v-model="paginate.per_page" @change="listar()">
+                <select class="form-control" v-model="paginate.per_page" @change="listar()">
                     <option value="3">3</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
-               
-                    </select>
+
+                </select>
             </div>
             <div class="col-6 md-6">
-               <nav aria-label="...">
+                <nav aria-label="...">
                     <ul class="pagination pagination-sm">
-                        <li class="page-item" :class="{disabled:paginate.page==1}"><a href="#" class="page-link" @click="paginate.page=1; listar();">&laquo;</a></li>
-                        <li class="page-item" :class="{disabled:paginate.page==1}"><a href="#" class="page-link" @click="paginate.page--; listar();">&lt;</a></li>
-                        <li class="page-item" v-for="n in paginasarray" :key="n" :class="{active:paginate.page==n}"><a href="#" class="page-link" @click="paginate.page=n; listar();">{{n}}</a></li>
-                        <li class="page-item" :class="{disabled:paginate.page==articulos.last_page}"><a href="#" class="page-link" @click="paginate.page++; listar();">&gt;</a> 
-                        <li class="page-item" :class="{disabled:paginate.page==articulos.last_page}"><a href="#" class="page-link" @click="paginate.page=articulos.last_page; listar();">&raquo;</a></li>
+                        <li class="page-item" :class="{disabled:paginate.page==1}"><a href="#" class="page-link"
+                                @click="paginate.page=1; listar();">&laquo;</a></li>
+                        <li class="page-item" :class="{disabled:paginate.page==1}"><a href="#" class="page-link"
+                                @click="paginate.page--; listar();">&lt;</a></li>
+                        <li class="page-item" v-for="n in paginasarray" :key="n" :class="{active:paginate.page==n}"><a
+                                href="#" class="page-link" @click="paginate.page=n; listar();">{{n}}</a></li>
+                        <li class="page-item" :class="{disabled:paginate.page==articulos.last_page}"><a href="#"
+                                class="page-link" @click="paginate.page++; listar();">&gt;</a>
+                        <li class="page-item" :class="{disabled:paginate.page==articulos.last_page}"><a href="#"
+                                class="page-link" @click="paginate.page=articulos.last_page; listar();">&raquo;</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
     </div>
-  
+
 </template>
 
 <script>
@@ -140,7 +145,7 @@
                     page: 1,
                     per_page: 5,
                 },
-                paginasarray:[],
+                paginasarray: [],
             }
 
         },
@@ -151,27 +156,27 @@
                     params: this.paginate
                 });
                 this.articulos = res.data;
-               // console.log(articulos)
+                // console.log(articulos)
                 this.listarPaginas();
-            }, 
-              async listarPaginas() {
-              const n=2;
-              let arrayN=[];
-              let ini = this.paginate.page -2;
-              if (ini<1) {
-                  ini=1;
-              }
+            },
+            async listarPaginas() {
+                const n = 2;
+                let arrayN = [];
+                let ini = this.paginate.page - 2;
+                if (ini < 1) {
+                    ini = 1;
+                }
 
-              let fin = this.paginate.page +2;
-              if (fin>this.articulos.last_page) {
-                  fin=this.articulos.last_page;
-              }
+                let fin = this.paginate.page + 2;
+                if (fin > this.articulos.last_page) {
+                    fin = this.articulos.last_page;
+                }
 
-              for (let i = ini; i <=fin; i++) {
-                  arrayN.push(i);
-                  
-              }
-                this.paginasarray=arrayN;
+                for (let i = ini; i <= fin; i++) {
+                    arrayN.push(i);
+
+                }
+                this.paginasarray = arrayN;
             },
             async eliminar(id) {
                 const res = await axios.delete('/articulos/' + id);
