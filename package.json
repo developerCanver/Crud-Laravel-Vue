@@ -36,6 +36,7 @@
         "datatables.net-bs4": "^1.10.24",
         "datatables.net-buttons-bs4": "^1.7.0",
         "jszip": "^3.6.0",
+        "moment": "^2.29.1",
         "pdfmake": "^0.1.71",
         "sweetalert2": "^10.16.6"
     }

@@ -27,19 +27,22 @@
                             <form>
                                 <div class="form-group ">
                                     <label for="exampleInputEmail1">Nombre Articulo</label>
-                                    <input type="text" class="form-control" placeholder="Nombre Articulo" required v-model="articulo.nombre">
+                                    <input type="text" class="form-control" placeholder="Nombre Articulo" required
+                                        v-model="articulo.nombre">
 
                                     <span class="text-danger" v-if="errores.nombre">{{errores.nombre[0]}}</span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Descripción</label>
-                                    <input type="text" class="form-control" placeholder="Descripción Articulo" required v-model="articulo.descripcion">
+                                    <input type="text" class="form-control" placeholder="Descripción Articulo" required
+                                        v-model="articulo.descripcion">
                                     <span class="text-danger"
                                         v-if="errores.descripcion">{{errores.descripcion[0]}}</span>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Stock</label>
-                                    <input type="number" class="form-control" placeholder="0" required v-model="articulo.stock">
+                                    <input type="number" class="form-control" placeholder="0" required
+                                        v-model="articulo.stock">
                                     <span class="text-danger" v-if="errores.stock">{{errores.stock[0]}}</span>
                                 </div>
 
@@ -78,14 +81,12 @@
                         <td>{{articulo.nombre}}</td>
                         <td>{{articulo.descripcion}}</td>
                         <td>{{articulo.stock}}</td>
-                        <td>{{articulo.created_at}}</td>
-                        <td class="form-inline">
-                            <div class="form-group m-2">
-                                <button class="btn btn-success btn-sm" type="button"> <i
-                                        class="fas fa-info-circle"></i></button>
+                        <td>{{$fecha(articulo.created_at)}}</td>
+                        <td class="form-inline" style="padding: 5px;">
+                            <div class="form-group ">                               
                                 <button class="btn btn-primary btn-sm" type="button" @click="ModalEditar(articulo)"> <i
                                         class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger btn-sm" type="button"> <i
+                                <button class="btn btn-danger btn-sm" type="button" @click="eliminar(articulo.id)"> <i
                                         class="fas fa-trash-alt"></i></button>
                             </div>
                         </td>
@@ -101,17 +102,8 @@
 </template>
 
 <script>
-    import datatable from 'datatables.net-bs4';
-    require('datatables.net-buttons/js/dataTables.buttons')
-    require('datatables.net-buttons/js/buttons.html5')
-    import print from 'datatables.net-buttons/js/buttons.print';
-    import jszip from 'jszip/dist/jszip';
-    import pdfmake from 'pdfmake/build/pdfmake';
-    import pdffonts from 'pdfmake/build/vfs_fonts';
-    import Swal from 'sweetalert2';
 
-    pdfMake.vfs = pdffonts.pdfMake.vfs;
-    window.JSZip = jszip;
+import Swal from 'sweetalert2';
 
     export default {
         mounted() {
@@ -136,74 +128,32 @@
         },
 
         methods: {
-            // listar la tabla con datos quemados
-            tabla() {
-                this.$nextTick(() => {
+            //fecha se paso de forma global app.js y se utilisa $fecha()
+            // fecha(Cambiar_fecha){
+            //     return moment(Cambiar_fecha).locale('es').format('LL');
 
-                    $('#example').DataTable({
-                        "order": [
-                            [0, 'desc']
-                        ],
-                        dom: "<'row'<'col-sm-12 m-5 text-center'B>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
-                            "<'row'<'col-sm-12'tr>>" +
-                            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p><br>>",
-                        //botones para exportar
-                        buttons: [{
-                                "extend": "copyHtml5",
-                                "text": "<i class='fas fa-copy'></i> Copiar",
-                                "titleAttr": "Copiar",
-                                "className": "btn btn-secondary",
-                            },
-                            {
-                                "extend": "excelHtml5",
-                                "text": "<i class='fas fa-file-excel'></i> Excel",
-                                "titleAttr": "Exportar a Excel",
-                                "className": "btn btn-success",
-                            },
-                            {
-                                "extend": "pdfHtml5",
-                                "text": "<i class='fas fa-file-pdf'></i> PDF",
-                                "titleAttr": "Exportar a PDF",
-                                "className": "btn btn-danger",
-                            },
-                            {
-                                "extend": "csvHtml5",
-                                "text": "<i class='fas fa-file-csv'></i> Csv",
-                                "titleAttr": "Exportar a Csv",
-                                "className": "btn btn-info",
-                            },
-                            {
-                                "extend": "print",
-                                "text": "<i class='fas fa-print'></i> Imprimir",
-                                "titleAttr": "Imprimir Archivo",
-                                "className": "btn btn-secondary",
-                            },
-
-
-                        ]
-                    });
-                });
-            },
+            // },
+            // SE paso tabla global app.js
+            // tabla() {
+            
+            // },
             //C0ONSULTA  
             getArticulos() {
                 axios.get('dataArticulos').then(res => {
                     this.articulos = res.data;
-                    //PARA QUE CARGUE LAS LIBRERIAS
                     //destruir la tabla para volver agenerarla
                     $('#example').DataTable().destroy()
-
-                    this.tabla();
-
+                    //PARA QUE CARGUE LAS LIBRERIAS
+                    this.$tablaglobal('#example');
                 })
             },
 
             async crear() {
                 try {
-
                     const res = await axios.post('/dataArticulos/', this.articulo);
-
                     this.getArticulos();
                     $('#exampleModal').modal('hide');
+                    this.idArticulo = '';
                     this.articulo = {
                         nombre: '',
                         descripcion: '',
@@ -222,12 +172,12 @@
                     if (error.response.data) {
                         this.errores = error.response.data.errors;
                     }
-
                 }
 
             },
-            editar() {
-                axios.put('dataArticulos/' + this.idArticulo, this.articulo).then(res => {
+            async editar() {
+                try {
+                    const res = await axios.put('dataArticulos/' + this.idArticulo, this.articulo);
                     //se envio los atributos de articulo al controlador
                     this.getArticulos();
                     //volver a listar
@@ -241,17 +191,49 @@
                         title: 'Felicidades! Editado con Éxito',
                         showConfirmButton: false,
                         timer: 1000
-                    })
+                    });
 
-                }).catch(function (error) {
+                } catch (error) {
                     //para imprimir en una aleerta 
-              
                     if (error.response.data) {
                         console.log(error.response.data.errors)
                         this.errores = error.response.data.errors;
                     }
+                }
+            },
+            async eliminar(id) {
+                try {
+                    Swal.fire({
+                        title: '¿Esta seguro de Eliminar?',
+                        text: "Se eliminara permanentemente!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Si, Continuar!',
+                        cancelButtonText: 'No, Cancelar!',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
 
-                });
+                            axios.delete('dataArticulos/' + id);
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Eliminado! con Éxito',
+                                showConfirmButton: false,
+                                timer: 800
+                            });
+                            this.getArticulos();
+                        }
+                    })
+
+                } catch (error) {
+                    //para imprimir en una aleerta 
+                    if (error.response.data) {
+                        console.log(error.response.data.errors)
+                        this.errores = error.response.data.errors;
+                    }
+                }
             },
             //abrir modal para crear articulo
             ModalCrear() {
@@ -264,7 +246,6 @@
                 }
                 this.btnCrear = true;
                 this.btnEditar = false;
-
             },
             //abrir modal para editar articulo
             ModalEditar(datos) {
@@ -279,7 +260,6 @@
                 this.btnEditar = true;
                 this.idArticulo = datos.id;
                 $('#exampleModal').modal('show');
-
             },
 
         }
